@@ -1,6 +1,12 @@
 # Python-SWISE-course
-Esta carpeta servirá para guardar los materiales e interactuar con los estudiantes del curso "Introducción a la programación aplicada en Python". Impartido por mí, Luis Felipe Flores Machado como actividad académica del capítulo hondureño de la sociedad de mujeres en la exploración espacial: SWISE-Honduras. 
+Esta carpeta servirá para guardar los materiales e interactuar con los estudiantes del curso "Introducción a la programación aplicada en Python". Impartido por mí, Luis Felipe Flores Machado, como actividad académica del capítulo hondureño de la sociedad de mujeres en la exploración espacial: SWISE-Honduras. 
 
+Algunos recursos que estamos manejando:
+* Canal de YouTube donde se suben las clases grabadas: https://www.youtube.com/channel/UCRZJzR-PWsoRfppzaauBe8A
+* Instalación del gestor de paquetes, Conda: https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
+* Editor ligero de texto para scripts: https://www.sublimetext.com/
+* Git para usuarios Windows: https://gitforwindows.org/
+* Tutorial general de Python en su documentación: https://docs.python.org/3/tutorial/index.html
 
 ## Generalidades y dinámicas del curso
 El curso "Introducción a la programacón aplicada en Python" es un curso enfocado en proyectos que pretende beneficiar a cualquier persona con intereses en programación para aprender a resolver problemas de todo tipo utilizando pensamientos y estructuras propias de un programador.
@@ -12,7 +18,7 @@ El curso cubre desde los básicos sin asumir previa experiencia en programación
 ## Fechas de realización del curso
 * **Fechas:** 31 de Agosto hasta 15 de Septiembre del 2020.
 * **Días de la semana:** El curso se imparte los días lunes, martes, jueves y viernes.
-* **Hora:** 4:00 pm - 6:00 pm
+* **Hora:** 4:00 pm - 6:00 pm en GMT -6
 
 ## Plataforma
 Se utilizará Google meet como plataforma para recibir las clases y se le enviará los enlaces de invitación a su correo electrónico, con los cuales podrá unirse a cada clase.
