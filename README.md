@@ -47,7 +47,7 @@ Los grupos que tengan al menos un integrante que haya resuelto uno de los proble
 
 * **MARTES 8:** Bosquejo del proyecto para que tengan el archivo para trabajar (y entregarlo el lunes 14). Aquí se visitarán los fundamentos de programación orientada a objetos.
 
-* **JUEVES 10:** Herramientas generales de visualización
+* **JUEVES 10:** Pogramación orientada a objetos: Introducción a las clases e instancias de clase, sobrecarga de operadores y métodos mágicos/dunder
 
 * **VIERNES 11:** Interacción con el sistema operativo, administradores de contexto y métodos mágicos/dunder 
 
@@ -61,7 +61,7 @@ Los grupos que tengan al menos un integrante que haya resuelto uno de los proble
 ## Proyectos
 1) Motor de cinemática de proyectiles: Se diseñarán un conjunto de funciones capaces de resolver cualquier problema de cinemática de proyectiles, ¡Pero igual mucho más! (Incluso en otros planetas)
 
-2) Programación de un videojuego básico sobre una civilización marciana. La manera en que nosotros interactuaremos con ellos será de su creatividad... (Aquí se practicarán los conceptos básicos de programación orientada a objetos)
+2) Programación de un videojuego básico con temática libre, como por ejemplo un juego de mesa, un clásico histórico, algún RPG de aventura, de estrategia, de trivia, etc. con la única condición de tener un objetivo y elementos/escenarios que evolucionen. La manera en que nosotros interactuaremos con ellos será de su creatividad... (Aquí se practicarán los conceptos básicos de programación orientada a objetos)
 
 3) Proyecto por decidir por la comunidad, existiendo actualmente como posibles temas:
 	* Teoría de grafos y diseño urbano de calles
