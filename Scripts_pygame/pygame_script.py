@@ -1,5 +1,6 @@
 # Importe de paquetes
 import pygame
+import random
 
 """
 CONFIGURACIÓN GENERAL
@@ -8,7 +9,7 @@ CONFIGURACIÓN GENERAL
 pygame.init()
 
 # Se define el modo del display/ventana
-ancho = 600
+ancho = 800
 altura = 600
 screen = pygame.display.set_mode((ancho, altura))
 
@@ -18,13 +19,18 @@ icon = pygame.image.load("graficos/spaceship.png")
 pygame.display.set_icon(icon)  # No funcionará dependiendo del tema que usen en su SO
 
 # Parámetros iniciales de objetos del juego
+# Jugador
 player_img = pygame.image.load("graficos/spaceship_player.png")
-alien_img = pygame.image.load("graficos/alien.png")
 size = player_img.get_size()
 playerX = ancho/2 - size[0]/2  # La posición debe tomar en cuenta el tamaño de 
                                # la imagen en sí
 playerY = round(0.8*altura)
 speedX = 0
+
+# Alien
+alien_img = pygame.image.load("graficos/alien.png")
+alienX = random.randint(0, ancho - size[0])
+franja_enemigos = random.randint(round(size[1]/2), 0.2*altura)
 
 # Controlador del while para apertura y cerradura de la ventana
 running = True
@@ -36,21 +42,46 @@ ELEMENTOS Y SISTEMAS DEL JUEGO
 # Clases 
 class Flotador:
 
-    def __init__(self, x, y, img, mov_rate = 0.3):
+    def __init__(self, x, y, img, mov_rate = 0.3, speedX = 0):
         self.img = img
         self.size = self.img.get_size()
         self.x, self.y = x, y
-        self.actualizar_posicion(x, y)
+        self.speedX = speedX
         self.mov_rate = mov_rate
+        self.actualizar_posicion()
 
-    def actualizar_posicion(self, x=None, y=None):
-        x = self.x if x is None else x 
-        y = self.y if y is None else y    
-        screen.blit(self.img, (x,y))
+    def actualizar_posicion(self):
+        self.x += self.speedX
+        screen.blit(self.img, (self.x, self.y))
+
+    def check_boundary(self):
+        borde_izquierdo = 0
+        borde_derecho = ancho - self.size[0]
+        xPosition = self.x
+        if xPosition <= borde_izquierdo:
+            self.x = borde_izquierdo
+        elif xPosition >= borde_derecho:
+            self.x = borde_derecho
+
+class Enemigo(Flotador):
+
+    def __init__(self, x, y, img, mov_rate = 0.3, speedX = 0.5):
+        super().__init__(x, y, img, mov_rate, speedX = speedX)
+
+    def check_boundary(self):
+        borde_izquierdo = 0
+        borde_derecho = ancho - self.size[0]
+        xPosition = self.x
+        if xPosition <= borde_izquierdo:
+            self.speedX = self.mov_rate
+        elif xPosition >= borde_derecho:
+            self.speedX = -self.mov_rate
+
+
 
 # Inicialización de datos y objetos:
 cohete = Flotador(playerX, playerY, player_img)
-alien = Flotador(playerX, 0.2*altura, alien_img)
+alien = Enemigo(alienX, 0.2*altura, alien_img)
 
 # Ciclo de repetición del juego
 while running:
@@ -70,20 +101,20 @@ while running:
         # KEYDOWN: Reacción a teclas presionadas
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                speedX = -cohete.mov_rate
+                cohete.speedX = -cohete.mov_rate
             if event.key == pygame.K_RIGHT:
-                speedX = +cohete.mov_rate
+                cohete.speedX = +cohete.mov_rate
 
         # KEYUP: Reacción a teclas levantadas
         key = pygame.key.get_pressed()
         if event.type == pygame.KEYUP:
             if any([key[pygame.K_LEFT], key[pygame.K_RIGHT]]):
                 if key[pygame.K_LEFT]:
-                    speedX = -cohete.mov_rate
+                    cohete.speedX = -cohete.mov_rate
                 else:
-                    speedX = +cohete.mov_rate
+                    cohete.speedX = +cohete.mov_rate
             else:
-                speedX = 0
+                cohete.speedX = 0
 
     """
     ACTUALIZACIÓN DE LA PANTALLA:
@@ -93,18 +124,13 @@ while running:
     # Fondo: Red, Green, Blue
     screen.fill((0, 140, 205))
 
-    # Cambio de estado del cohete
-    playerX += speedX
-    cohete.actualizar_posicion(playerX, playerY)
+    # Cambio de estado de los objetos
+    cohete.actualizar_posicion()
     alien.actualizar_posicion()
 
     # Colisiones con el borde de la pantalla
-    borde_izquierdo = 0
-    borde_derecho = ancho - cohete.size[0]
-    if playerX <= borde_izquierdo:
-        playerX = borde_izquierdo
-    elif playerX >= borde_derecho:
-        playerX = borde_derecho
+    cohete.check_boundary()
+    alien.check_boundary()
 
     # Actualizando los cambios
-    pygame.display.update() 
+    pygame.display.update()
