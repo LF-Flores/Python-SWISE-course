@@ -1,6 +1,7 @@
 # Importe de paquetes
 import pygame
 import random
+import numpy as np
 
 """
 CONFIGURACIÓN GENERAL
@@ -65,10 +66,17 @@ class Flotador:
     def check_boundary(self):
         borde_izquierdo = 0
         borde_derecho = ancho - self.size[0]
-        if self.x <= borde_izquierdo:
+        xPosition = self.x
+        if xPosition <= borde_izquierdo:
             self.x = borde_izquierdo
-        elif self.x >= borde_derecho:
+        elif xPosition >= borde_derecho:
             self.x = borde_derecho
+
+    def check_colision(self, other):
+        our_coords = np.array([self.x + self.size[0]/2, self.y + self.size[1]/2])
+        their_coords = np.array([other.x + other.size[0]/2, other.y + other.size[1]/2])
+        dist = np.linalg.norm(our_coords - their_coords)
+        return(dist < other.size[0]/2+0.2*self.size[1]/2)
 
 class Enemigo(Flotador):
 
@@ -83,11 +91,10 @@ class Enemigo(Flotador):
     def check_boundary(self):
         borde_izquierdo = 0
         borde_derecho = ancho - self.size[0]
-        xPosition = self.x
-        if xPosition <= borde_izquierdo:
+        if self.x <= borde_izquierdo:
             self.speedX = - self.speedX
             self.y += self.approaching_speed*altura 
-        elif xPosition >= borde_derecho:
+        elif self.x >= borde_derecho:
             self.speedX = - self.speedX
             self.y += self.approaching_speed*altura 
 
@@ -95,7 +102,7 @@ class Bala(Flotador):
 
     def __init__(self, x, y, img, emisor, speedX = 0):
         self.disparado = False
-        self.emisor = emisor
+        self.emisor = emisor  # Rastreará el estado del emisor para regresar a él posteriormente
         super().__init__(x, y, img, speedX = speedX)
 
     def fire(self):
@@ -108,17 +115,25 @@ class Bala(Flotador):
         if self.disparado:
             self.y -= self.mov_rate
             self.fire()
+        else:
+            self.x = self.emisor.x
         # Una vez que la bala llega al final de la pantalla
         # regresamos su estado a la posicion del cohete y disparado = False
         if self.y <= 0:  
-            self.disparado = False
-            self.x, self.y = self.emisor.x, self.emisor.y
+            self.restore_state()
+
+    def restore_state(self):
+        self.disparado = False
+        self.x, self.y = self.emisor.x, self.emisor.y
+
+
 
 
 # Inicialización de datos y objetos:
 cohete = Flotador(playerX, playerY, player_img)
 alien = Enemigo(alienX, 0.2*altura, alien_img)
 bala_normal = Bala(playerX, playerY, bullet_img, cohete)
+score = 0
 
 # Ciclo de repetición del juego
 while running:
@@ -161,17 +176,20 @@ while running:
     - Posición del jugador
     """
     # Fondo: Red, Green, Blue
-    #screen.fill((0, 140, 205))
     screen.blit(background, (0,0))
 
     # Cambio de estado de los objetos
+    bala_normal.actualizar_posicion()
     cohete.actualizar_posicion()
     alien.actualizar_posicion()
-    bala_normal.actualizar_posicion()
 
-    # Colisiones con el borde de la pantalla
+    # Colisiones con el borde de la pantalla y con enemigos
     cohete.check_boundary()
     alien.check_boundary()
+    if bala_normal.check_colision(alien):
+        score += 1
+        bala_normal.restore_state()
+        print(score)
 
     # Actualizando los cambios
     pygame.display.update()
