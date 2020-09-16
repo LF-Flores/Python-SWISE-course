@@ -10,7 +10,7 @@ CONFIGURACIÓN GENERAL
 pygame.init()
 
 # Se define el modo del display/ventana
-ancho = 600
+ancho = 800
 altura = 600
 screen = pygame.display.set_mode((ancho, altura))
 background = pygame.image.load("graficos/fondo.jpg")
@@ -76,7 +76,7 @@ class Flotador:
         our_coords = np.array([self.x + self.size[0]/2, self.y + self.size[1]/2])
         their_coords = np.array([other.x + other.size[0]/2, other.y + other.size[1]/2])
         dist = np.linalg.norm(our_coords - their_coords)
-        return(dist < other.size[0]/2+0.2*self.size[1]/2)
+        return(dist < other.size[0]/2+0.1*self.size[1])
 
 class Enemigo(Flotador):
 
@@ -131,7 +131,8 @@ class Bala(Flotador):
 
 # Inicialización de datos y objetos:
 cohete = Flotador(playerX, playerY, player_img)
-alien = Enemigo(alienX, 0.2*altura, alien_img)
+num_aliens = 3
+lista_aliens = [Enemigo(alienX, 0.2*altura, alien_img) for i in range(num_aliens)]
 bala_normal = Bala(playerX, playerY, bullet_img, cohete)
 score = 0
 
@@ -176,20 +177,23 @@ while running:
     - Posición del jugador
     """
     # Fondo: Red, Green, Blue
+    #screen.fill((0, 140, 205))
     screen.blit(background, (0,0))
 
     # Cambio de estado de los objetos
-    bala_normal.actualizar_posicion()
     cohete.actualizar_posicion()
-    alien.actualizar_posicion()
+    for alien in lista_aliens:
+        alien.actualizar_posicion()
+    bala_normal.actualizar_posicion()
 
     # Colisiones con el borde de la pantalla y con enemigos
     cohete.check_boundary()
-    alien.check_boundary()
-    if bala_normal.check_colision(alien):
-        score += 1
-        bala_normal.restore_state()
-        print(score)
+    for alien in lista_aliens:
+        alien.check_boundary()
+        if bala_normal.check_colision(alien):
+            score += 1
+            bala_normal.restore_state()
+            alien.__init__(alienX, 0.2*altura, alien_img)
 
     # Actualizando los cambios
     pygame.display.update()
